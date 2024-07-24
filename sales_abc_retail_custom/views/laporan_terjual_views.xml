@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="laporan_barang_terlaris_action" model="ir.actions.act_window">
+        <field name="name">Laporan Barang Terlaris</field>
+        <field name="res_model">laporan.barang.terlaris</field>
+        <field name="view_mode">graph,pivot,tree</field>
+        <field name="context">{"search_default_this_month":1,"search_default_group_by_produk":1,"search_default_group_by_kategori":1}</field>
+    </record>
+
+    <menuitem id="menu_laporan_barang_terlaris"
+              name="Laporan Barang Terlaris"
+              action="laporan_barang_terlaris_action"
+              parent="sale.menu_sale_report"
+              sequence="30"/>
+
+    <record id="laporan_barang_terlaris_search" model="ir.ui.view">
+        <field name="name">laporan.barang.terlaris.search</field>
+        <field name="model">laporan.barang.terlaris</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="produk_id" string="Produk"/>
+                <field name="kategori_produk" string="Kategori"/>
+                <filter string="Bulan Ini" name="this_month" domain="[('tanggal_penjualan', '&gt;=', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d')), ('tanggal_penjualan', '&lt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <group expand="1" string="Kelompokkan Berdasarkan">
+                    <filter string="Produk" name="group_by_produk" context="{'group_by': 'produk_id'}"/>
+                    <filter string="Kategori" name="group_by_kategori" context="{'group_by': 'kategori_produk'}"/>
+                    <filter string="Tanggal" name="group_by_tanggal" context="{'group_by': 'tanggal_penjualan'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="laporan_barang_terlaris_pivot_view" model="ir.ui.view">
+        <field name="name">laporan.barang.terlaris.pivot</field>
+        <field name="model">laporan.barang.terlaris</field>
+        <field name="arch" type="xml">
+            <pivot string="Analisis Barang Terlaris">
+                <field name="produk_id"/>
+                <field name="jumlah_terjual"/>
+                <field name="kategori_produk"/>
+                <field name="tanggal_penjualan"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_laporan_barang_terlaris_tree" model="ir.ui.view">
+        <field name="name">laporan.barang.terlaris.tree</field>
+        <field name="model">laporan.barang.terlaris</field>
+        <field name="arch" type="xml">
+            <tree string="Barang Terlaris">
+                <field name="produk_id"/>
+                <field name="jumlah_terjual"/>
+                <field name="kategori_produk"/>
+                <field name="tanggal_penjualan"/>
+            </tree>
+        </field>
+    </record>
+</odoo>
